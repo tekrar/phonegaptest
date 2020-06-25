@@ -18,7 +18,7 @@
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
 
-  <author href="https://build.phonegap.com" email="alket.cecaj@gmail.com">
-      Alket Cecaj
+  <author href="https://build.phonegap.com" email="marco.mamei@gmail.com">
+      Maro Mamei
   </author>
 </widget>
