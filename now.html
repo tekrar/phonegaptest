@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ISS</title>
+	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<script src="js/jquery.js"></script>
+	
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+	
+	 
+</head>
+<body>
+<div data-role="page" class="jqm-demos jqm-home">
+
+	<div data-role="header" class="jqm-header">
+		
+		<h1>ISS</h1>
+		
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content jqm-content">
+	<button onClick="window.location.reload();">Refresh Page</button>
+	<div id="mapid" style="width: 500px; height: 800px;"></div>
+	 
+    <script>
+		function testJSON(){
+           var dati = $.getJSON("http://api.open-notify.org/iss-now.json");
+           return dati; 
+        }
+
+$.when(testJSON()).then(function(jsondata){
+
+    console.log(jsondata);
+	var ts = jsondata.timestamp; 
+	console.log(ts);
+	
+	var position = jsondata.iss_position; 
+	var lat = position.latitude;
+	var lon = position.longitude; 
+	
+	console.log(lat);
+	console.log(lon);
+    
+    var date = new Date(ts * 1000);
+    var hours = date.getHours();
+    var minutes = "0" + date.getMinutes();
+    var seconds = "0" + date.getSeconds();
+    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+	console.log('-->');
+    console.log(formattedTime);
+	
+	var mymap = L.map('mapid').setView([lat, lon], 2);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(mymap);
+
+	L.marker([lat, lon]).addTo(mymap)
+		.bindPopup("<b>Ora Italian "+formattedTime+"</b><br /> Coordinate : "+lat+","+lon+" ").openPopup();
+
+});
+
+
+</script>
+	</div>
+
+      
+	<div data-role="footer">
+      <nav data-role="navbar">
+            <ul>
+                <li><a href="index.html" class="ui-btn ui-icon-plus ui-btn-icon-top">Home</a></li>
+                <li><a href="now.html" class="ui-btn ui-icon-check ui-btn-icon-top">Mappa</a></li>
+                <li><a href="news.html" data-transition="slide"  class="ui-btn ui-icon-grid ui-btn-icon-top">News</a></li>
+            </ul>
+      </nav>
+    </div>  
+
+
+</div><!-- /page -->
+
+</body>
+</html>
+
+
+	
